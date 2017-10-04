@@ -8,7 +8,7 @@ public class HeadCircle implements Circle {
 	private float y = -1;
 	private float speed = .01f;
 	private float diam;
-	private static final float MAX_DIAM = 10f;
+	private static final float MAX_DIAM = 7f;
 	private static final float INIT_DIAM = .1f;
 	
 	public HeadCircle(PApplet parent) {
@@ -40,6 +40,7 @@ public class HeadCircle implements Circle {
 
 	@Override
 	public void display() {
+		parent.stroke(color);
 		parent.ellipse(x, y, diam, diam);
 	}
 
