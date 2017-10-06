@@ -66,17 +66,21 @@ public class RipplesApplication extends PApplet {
 			drawIfValid(handLeft);
 			drawIfValid(handRight);
 			
-			if(head != null) {
-				noFill();
-				strokeWeight(0.009f);
-				tempCircle.update(head.x, head.y);
-				tempCircle.display();
+			noFill();
+			strokeWeight(0.009f);
+			
+			rippleIfValid(head, tempCircle);
+//			if(head != null) {
+//				noFill();
+//				strokeWeight(0.009f);
+//				tempCircle.update(head.x, head.y);
+//				tempCircle.display();
 				
 //				for(HeadCircle circle : headCircles) {
 //					circle.update(head.x, head.y);
 //					circle.display();
 //				}
-			}
+//			}
 			
 			
 
@@ -85,7 +89,7 @@ public class RipplesApplication extends PApplet {
 	}
 
 	/**
-	 * Draws an ellipse in the x,y position of the vector (it ignores z).
+	 * Calls the draw and update method of a circle.
 	 * Will do nothing is vec is null.  This is handy because get joint 
 	 * will return null if the joint isn't tracked. 
 	 * @param vec
@@ -93,6 +97,20 @@ public class RipplesApplication extends PApplet {
 	public void drawIfValid(PVector vec) {
 		if(vec != null) {
 			ellipse(vec.x, vec.y, .1f,.1f);
+		}
+
+	}
+	
+	/**
+	 * Calls the display and update method of a circle.
+	 * Will do nothing is vec is null.  This is handy because get joint 
+	 * will return null if the joint isn't tracked. 
+	 * @param vec
+	 */
+	public void rippleIfValid(PVector vec, Circle ripple) {
+		if(vec != null) {
+			ripple.display();
+			ripple.update(vec.x, vec.y);
 		}
 
 	}
