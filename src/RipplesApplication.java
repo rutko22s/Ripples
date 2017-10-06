@@ -31,7 +31,7 @@ public class RipplesApplication extends PApplet {
 		 * use this code to run your PApplet from data recorded by UPDRecorder 
 		 */
 		try {
-			kinectReader = new KinectBodyDataProvider("test.kinect", 2);
+			kinectReader = new KinectBodyDataProvider("test2.kinect", 2);
 		} catch (IOException e) {
 			System.out.println("Unable to create kinect producer");
 		} 
@@ -139,12 +139,14 @@ public class RipplesApplication extends PApplet {
 	public boolean checkIntersect(HandCircle ripple) {
 		System.out.println("ran");
 		float diam = .1f;
-		double distance = Math.sqrt( 
-				(double)Math.pow((handLeft.x - handRight.x), 2) + 
-				(double)Math.pow((handLeft.y - handRight.y), 2));
-		System.out.println(handLeft + "\t"+ handRight);
-		if(distance <= diam)
-			return true;
+		if (handLeft!=null && handRight!=null)	{
+			double distance = Math.sqrt( 
+					(double)Math.pow((handLeft.x - handRight.x), 2) + 
+					(double)Math.pow((handLeft.y - handRight.y), 2));
+			System.out.println(handLeft + "\t"+ handRight);
+			if(distance <= diam)
+				return true;
+		}
 		return false;
 			
 	}
