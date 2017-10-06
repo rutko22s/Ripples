@@ -14,9 +14,9 @@ public class RipplesApplication extends PApplet {
 	KinectBodyDataProvider kinectReader;
 	HeadCircle tempCircle;
 	List<HeadCircle> headCircles;
+	int count = 1;
 
 	public void settings() {
-		//size(500,500, P2D);
 		fullScreen(P2D);
 	}
 
@@ -36,6 +36,7 @@ public class RipplesApplication extends PApplet {
 		
 		tempCircle = new HeadCircle(this);
 		headCircles = new ArrayList<HeadCircle>();
+		headCircles.add(tempCircle);
 
 	}
 	public void draw(){
@@ -44,9 +45,14 @@ public class RipplesApplication extends PApplet {
 
 		//make positive y up and center of window 0,0
 		translate(1,-1);
-		//noStroke();
 
 		background(0,0,0);
+		
+		if( count < 10 && (frameCount == ((int)frameRate * count )))
+		{
+			headCircles.add(new HeadCircle(this));
+			count++;
+		}
 
 		KinectBodyData bodyData = kinectReader.getMostRecentData();
 		Body person = bodyData.getPerson(0);
@@ -68,21 +74,8 @@ public class RipplesApplication extends PApplet {
 			
 			noFill();
 			strokeWeight(0.009f);
-			
-			rippleIfValid(head, tempCircle);
-//			if(head != null) {
-//				noFill();
-//				strokeWeight(0.009f);
-//				tempCircle.update(head.x, head.y);
-//				tempCircle.display();
-				
-//				for(HeadCircle circle : headCircles) {
-//					circle.update(head.x, head.y);
-//					circle.display();
-//				}
-//			}
-			
-			
+			for(HeadCircle ripple : headCircles)
+			rippleIfValid(head, ripple);		
 
 		}
 		
