@@ -28,7 +28,7 @@ public class HeadCircle implements Circle {
 
 	@Override
 	public void update(float x, float y) {
-		if(this.x < 0 || this.y < 0 || diam > MAX_DIAM) {
+		if(this.x == -1 || this.y == -1 || diam > MAX_DIAM) {
 			this.x = x;
 			this.y = y;
 			diam = INIT_DIAM;

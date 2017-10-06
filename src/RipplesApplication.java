@@ -12,9 +12,14 @@ import processing.core.PVector;
 public class RipplesApplication extends PApplet {
 
 	KinectBodyDataProvider kinectReader;
-	HeadCircle tempCircle;
+	//HeadCircle tempCircle;
 	List<HeadCircle> headCircles;
+	List<HandCircle> leftHandCircles;
+	List<HandCircle> rightHandCircles;
 	int count = 1;
+	
+	PVector handLeft;
+	PVector handRight;
 
 	public void settings() {
 		fullScreen(P2D);
@@ -24,19 +29,22 @@ public class RipplesApplication extends PApplet {
 
 		/*
 		 * use this code to run your PApplet from data recorded by UPDRecorder 
-		 */
+		 
 		try {
 			kinectReader = new KinectBodyDataProvider("test.kinect", 2);
 		} catch (IOException e) {
 			System.out.println("Unable to create kinect producer");
-		}
+		} */
 		 
-		//kinectReader = new KinectBodyDataProvider(8008);
+		kinectReader = new KinectBodyDataProvider(8008);
 		kinectReader.start();
 		
-		tempCircle = new HeadCircle(this);
+		//tempCircle = new HeadCircle(this);
 		headCircles = new ArrayList<HeadCircle>();
-		headCircles.add(tempCircle);
+		leftHandCircles = new ArrayList<HandCircle>();
+		rightHandCircles = new ArrayList<HandCircle>();
+		
+		//headCircles.add(tempCircle);
 
 	}
 	public void draw(){
@@ -51,7 +59,9 @@ public class RipplesApplication extends PApplet {
 		if( count < 10 && (frameCount == ((int)frameRate * count )))
 		{
 			headCircles.add(new HeadCircle(this));
-			count++;
+			leftHandCircles.add(new HandCircle(this));
+			rightHandCircles.add(new HandCircle(this));
+			count += 2;
 		}
 
 		KinectBodyData bodyData = kinectReader.getMostRecentData();
@@ -60,8 +70,8 @@ public class RipplesApplication extends PApplet {
 			PVector head = person.getJoint(Body.HEAD);
 			PVector footLeft = person.getJoint(Body.FOOT_LEFT);
 			PVector footRight = person.getJoint(Body.FOOT_RIGHT);
-			PVector handLeft = person.getJoint(Body.HAND_LEFT);
-			PVector handRight = person.getJoint(Body.HAND_RIGHT);
+			handLeft = person.getJoint(Body.HAND_LEFT);
+			handRight = person.getJoint(Body.HAND_RIGHT);
 
 
 			fill(255,255,255);
@@ -75,7 +85,18 @@ public class RipplesApplication extends PApplet {
 			noFill();
 			strokeWeight(0.009f);
 			for(HeadCircle ripple : headCircles)
-			rippleIfValid(head, ripple);		
+			{
+				rippleIfValid(head, ripple);	
+			}
+			for(HandCircle ripple : leftHandCircles)
+			{
+				rippleIfValid(handLeft, ripple);	
+			}
+			for(HandCircle ripple : rightHandCircles)
+			{
+				
+				rippleIfValid(handRight, ripple);	
+			}
 
 		}
 		
@@ -102,12 +123,31 @@ public class RipplesApplication extends PApplet {
 	 */
 	public void rippleIfValid(PVector vec, Circle ripple) {
 		if(vec != null) {
-			ripple.display();
-			ripple.update(vec.x, vec.y);
+			if(ripple.getClass().toString().equals("class HandCircle")) {
+				if(!checkIntersect((HandCircle)ripple)) {
+					ripple.display();
+					ripple.update(vec.x, vec.y);
+				}
+			}
+			else {
+				ripple.display();
+				ripple.update(vec.x, vec.y); }
 		}
 
 	}
 
+	public boolean checkIntersect(HandCircle ripple) {
+		System.out.println("ran");
+		float diam = .1f;
+		double distance = Math.sqrt( 
+				(double)Math.pow((handLeft.x - handRight.x), 2) + 
+				(double)Math.pow((handLeft.y - handRight.y), 2));
+		System.out.println(handLeft + "\t"+ handRight);
+		if(distance <= diam)
+			return true;
+		return false;
+			
+	}
 
 	public static void main(String[] args) {
 		PApplet.main(RipplesApplication.class.getName());
