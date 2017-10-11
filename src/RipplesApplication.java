@@ -34,7 +34,7 @@ public class RipplesApplication extends PApplet {
 		 * use this code to run your PApplet from data recorded by UPDRecorder 
 		 */
 		try {
-			kinectReader = new KinectBodyDataProvider("test2.kinect", 2);
+			kinectReader = new KinectBodyDataProvider("test2.kinect", 1);
 		} catch (IOException e) {
 			System.out.println("Unable to create kinect producer");
 		} 
@@ -89,8 +89,8 @@ public class RipplesApplication extends PApplet {
 //			drawIfValid(head);
 //			drawIfValid(footLeft);
 //			drawIfValid(footRight);
-//			drawIfValid(handLeft);
-//			drawIfValid(handRight);
+			drawIfValid(handLeft);
+			drawIfValid(handRight);
 			
 			noFill();
 			strokeWeight(0.009f);
@@ -115,6 +115,7 @@ public class RipplesApplication extends PApplet {
 			}
 			for(HeadCircle ripple : headCircles)
 			{
+				ripple.stopRipples(handsTogether);
 				rippleIfValid(head, ripple);	
 			}
 		}
@@ -160,13 +161,13 @@ public class RipplesApplication extends PApplet {
 	}
 
 	public boolean checkIntersect() {
-		//System.out.println("ran");
+
 		float diam = .1f;
 		if (handLeft!=null && handRight!=null)	{
 			double distance = Math.sqrt( 
 					(double)Math.pow((handLeft.x - handRight.x), 2) + 
 					(double)Math.pow((handLeft.y - handRight.y), 2));
-			//System.out.println(handLeft + "\t"+ handRight);
+
 			if(distance <= diam) {
 				wereTogether = true;
 				return true;
