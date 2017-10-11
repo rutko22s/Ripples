@@ -9,14 +9,14 @@ public class HandCircle implements Circle {
 	private int bval;
 	private float x = -1;
 	private float y = -1;
-	private float speed = .01f;
+	private float speed = .005f;
 	private float diam;
-	private float maxDiam = 1f;
+	private float maxDiam = .6f;
 	private static final float INIT_DIAM = .1f;
 	boolean stop = false;
 	private long stagger;
 	private long startTime;
-	private float fadeRate = 5;
+	private float fadeRate = 2;
 	
 	public HandCircle(PApplet parent, long stagger) {
 		startTime = System.currentTimeMillis();
@@ -66,9 +66,14 @@ public class HandCircle implements Circle {
 		}
 	}
 	
-	public void changeDiam(float newValue) {
-		maxDiam = newValue;
-		fadeRate = newValue*.001f;
+	public void expandDiam(boolean larger) {
+		if(larger) {
+			maxDiam = 7f;
+			fadeRate = 1;
+		} else {
+			maxDiam = .6f;
+			fadeRate = 2;
+		}
 	}
  
 	@Override

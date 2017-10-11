@@ -11,7 +11,7 @@ public class FootCircle implements Circle {
 	private float y = -1;
 	private float speed = .02f;
 	private float diam;
-	private static final float MAX_DIAM = 7f;
+	private static final float MAX_DIAM = 5f;
 	private static final float INIT_DIAM = .1f;
 	private long startTime;
 	private long stagger;

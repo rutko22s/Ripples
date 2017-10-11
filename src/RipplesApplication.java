@@ -34,7 +34,7 @@ public class RipplesApplication extends PApplet {
 		 * use this code to run your PApplet from data recorded by UPDRecorder 
 		 */
 		try {
-			kinectReader = new KinectBodyDataProvider("test2.kinect", 2);
+			kinectReader = new KinectBodyDataProvider("test3.kinect", 2);
 		} catch (IOException e) {
 			System.out.println("Unable to create kinect producer");
 		} 
@@ -50,9 +50,9 @@ public class RipplesApplication extends PApplet {
 		wereTogether = false;
 		
 		for(int i=0; i<15; i++) {
-			if (i < 10) {
-				leftHandCircles.add(new HandCircle(this, i * 200));
-				rightHandCircles.add(new HandCircle(this, i * 200));
+			if (i < 8) {
+				leftHandCircles.add(new HandCircle(this, i * 300));
+				rightHandCircles.add(new HandCircle(this, i * 300));
 				if (i < 4) {
 					leftFootCircles.add(new FootCircle(this, i * 100));
 					rightFootCircles.add(new FootCircle(this, i * 100));
@@ -94,14 +94,6 @@ public class RipplesApplication extends PApplet {
 			
 			noFill();
 			strokeWeight(0.009f);
-			for(HandCircle ripple : leftHandCircles)
-			{
-				rippleIfValid(handLeft, ripple);	
-			}
-			for(HandCircle ripple : rightHandCircles)
-			{				
-				rippleIfValid(handRight, ripple);	
-			}
 			for(FootCircle ripple : leftFootCircles) 
 			{
 				rippleIfValid(footLeft, ripple);
@@ -109,6 +101,14 @@ public class RipplesApplication extends PApplet {
 			for(FootCircle ripple : rightFootCircles) 
 			{
 				rippleIfValid(footRight, ripple);
+			}
+			for(HandCircle ripple : leftHandCircles)
+			{
+				rippleIfValid(handLeft, ripple);	
+			}
+			for(HandCircle ripple : rightHandCircles)
+			{				
+				rippleIfValid(handRight, ripple);	
 			}
 			for(HeadCircle ripple : headCircles)
 			{
@@ -141,10 +141,10 @@ public class RipplesApplication extends PApplet {
 		if(vec != null) {
 			if(ripple.getClass().toString().equals("class HandCircle")) {
 				if(!checkIntersect((HandCircle)ripple)) {
-					((HandCircle)ripple).changeDiam(1f);
+					((HandCircle)ripple).expandDiam(false);
 					ripple.update(vec.x, vec.y);
 				} else {
-					((HandCircle)ripple).changeDiam(7f);
+					((HandCircle)ripple).expandDiam(true);
 					ripple.update(vec.x, vec.y);
 				}
 			} else {
