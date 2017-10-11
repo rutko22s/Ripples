@@ -16,7 +16,10 @@ public class RipplesApplication extends PApplet {
 	List<HeadCircle> headCircles;
 	List<HandCircle> leftHandCircles;
 	List<HandCircle> rightHandCircles;
+	List<FootCircle> leftFootCircles;
+	List<FootCircle> rightFootCircles;
 	int count = 1;
+	private boolean wereTogether;
 	
 	PVector handLeft;
 	PVector handRight;
@@ -39,10 +42,24 @@ public class RipplesApplication extends PApplet {
 		//kinectReader = new KinectBodyDataProvider(8008);
 		kinectReader.start();
 		
-		//tempCircle = new HeadCircle(this);
 		headCircles = new ArrayList<HeadCircle>();
 		leftHandCircles = new ArrayList<HandCircle>();
 		rightHandCircles = new ArrayList<HandCircle>();
+		leftFootCircles = new ArrayList<FootCircle>();
+		rightFootCircles = new ArrayList<FootCircle>();
+		wereTogether = false;
+		
+		for(int i=0; i<15; i++) {
+			if (i < 10) {
+				leftHandCircles.add(new HandCircle(this, i * 200));
+				rightHandCircles.add(new HandCircle(this, i * 200));
+				if (i < 4) {
+					leftFootCircles.add(new FootCircle(this, i * 100));
+					rightFootCircles.add(new FootCircle(this, i * 100));
+				}
+			}
+			headCircles.add(new HeadCircle(this, i*900));
+		}
 		
 		//headCircles.add(tempCircle);
 
@@ -55,14 +72,6 @@ public class RipplesApplication extends PApplet {
 		translate(1,-1);
 
 		background(0,0,0);
-		
-		if( count < 10 && (frameCount == ((int)frameRate * count )))
-		{
-			headCircles.add(new HeadCircle(this));
-			leftHandCircles.add(new HandCircle(this));
-			rightHandCircles.add(new HandCircle(this));
-			count += 2;
-		}
 
 		KinectBodyData bodyData = kinectReader.getMostRecentData();
 		Body person = bodyData.getPerson(0);
@@ -76,28 +85,35 @@ public class RipplesApplication extends PApplet {
 
 			fill(255,255,255);
 			noStroke();
-			drawIfValid(head);
-			drawIfValid(footLeft);
-			drawIfValid(footRight);
-			drawIfValid(handLeft);
-			drawIfValid(handRight);
+			//commented out for now -- should be in final or no?
+//			drawIfValid(head);
+//			drawIfValid(footLeft);
+//			drawIfValid(footRight);
+//			drawIfValid(handLeft);
+//			drawIfValid(handRight);
 			
 			noFill();
 			strokeWeight(0.009f);
-			for(HeadCircle ripple : headCircles)
-			{
-				rippleIfValid(head, ripple);	
-			}
 			for(HandCircle ripple : leftHandCircles)
 			{
 				rippleIfValid(handLeft, ripple);	
 			}
 			for(HandCircle ripple : rightHandCircles)
-			{
-				
+			{				
 				rippleIfValid(handRight, ripple);	
 			}
-
+			for(FootCircle ripple : leftFootCircles) 
+			{
+				rippleIfValid(footLeft, ripple);
+			}
+			for(FootCircle ripple : rightFootCircles) 
+			{
+				rippleIfValid(footRight, ripple);
+			}
+			for(HeadCircle ripple : headCircles)
+			{
+				rippleIfValid(head, ripple);	
+			}
 		}
 		
 	}
@@ -125,30 +141,38 @@ public class RipplesApplication extends PApplet {
 		if(vec != null) {
 			if(ripple.getClass().toString().equals("class HandCircle")) {
 				if(!checkIntersect((HandCircle)ripple)) {
-					ripple.display();
 					ripple.update(vec.x, vec.y);
+					ripple.display();
 				}
-			}
-			else {
+			} else {
+				ripple.update(vec.x, vec.y); 
 				ripple.display();
-				ripple.update(vec.x, vec.y); }
+			}
 		}
 
 	}
 
 	public boolean checkIntersect(HandCircle ripple) {
-		System.out.println("ran");
+		//System.out.println("ran");
 		float diam = .1f;
 		if (handLeft!=null && handRight!=null)	{
 			double distance = Math.sqrt( 
 					(double)Math.pow((handLeft.x - handRight.x), 2) + 
 					(double)Math.pow((handLeft.y - handRight.y), 2));
-			System.out.println(handLeft + "\t"+ handRight);
-			if(distance <= diam)
+			//System.out.println(handLeft + "\t"+ handRight);
+			if(distance <= diam) {
+				wereTogether = true;
 				return true;
+			} else {
+				wereTogether = false;
+				return false;
+			}
+		} else {
+			if(wereTogether)
+				return true;
+			else
+				return false;						
 		}
-		return false;
-			
 	}
 
 	public static void main(String[] args) {

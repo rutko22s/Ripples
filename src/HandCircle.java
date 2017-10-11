@@ -4,16 +4,26 @@ public class HandCircle implements Circle {
 
 	PApplet parent;
 	private int color;
+	private int rval;
+	private int gval;
+	private int bval;
 	private float x = -1;
 	private float y = -1;
-	private float speed = .02f;
+	private float speed = .01f;
 	private float diam;
-	private static final float MAX_DIAM = 7f;
+	private static final float MAX_DIAM = 1f;
 	private static final float INIT_DIAM = .1f;
 	boolean stop = false;
+	private long stagger;
+	private long startTime;
 	
-	public HandCircle(PApplet parent) {
+	public HandCircle(PApplet parent, long stagger) {
+		startTime = System.currentTimeMillis();
+		this.stagger = stagger;
 		this.parent = parent;
+		rval = 255;
+		gval = 130;
+		bval = 67;
 		color = parent.color(255,130,67);
 	}
 	
@@ -29,18 +39,29 @@ public class HandCircle implements Circle {
 
 	@Override
 	public void update(float x, float y) {
-		if(this.x == -1 || this.y == -1 || diam > MAX_DIAM) {
-			this.x = x;
-			this.y = y;
-			diam = INIT_DIAM;
-		}
-		if(!stop)
-		{
-			parent.stroke(color);
-			diam += speed;
-		}
-		else {
-			parent.noStroke();
+		if (System.currentTimeMillis() - startTime > stagger) {
+			if (this.x == -1 || this.y == -1 || diam > MAX_DIAM) {
+				this.x = x;
+				this.y = y;
+				diam = INIT_DIAM;
+				rval = 255;
+				gval = 130;
+				bval = 67;
+				color = parent.color(rval, gval, bval);
+			} else {
+				// if (!stop) {
+				parent.stroke(color);
+				diam += speed;
+				rval -= 5;
+				gval -= 5;
+				bval -= 5;
+				if (bval < 0)
+					bval = 0;
+				color = parent.color(rval, gval, bval);
+				// } else {
+				// parent.noStroke();
+				// }
+			}
 		}
 	}
 
@@ -57,6 +78,8 @@ public class HandCircle implements Circle {
 		
 		if(distance <= INIT_DIAM)
 			stop = true;
+		else
+			stop = false;
 			
 	}
 
