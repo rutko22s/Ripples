@@ -34,7 +34,7 @@ public class RipplesApplication extends PApplet {
 		 * use this code to run your PApplet from data recorded by UPDRecorder 
 		 */
 		try {
-			kinectReader = new KinectBodyDataProvider("test3.kinect", 2);
+			kinectReader = new KinectBodyDataProvider("test2.kinect", 2);
 		} catch (IOException e) {
 			System.out.println("Unable to create kinect producer");
 		} 
@@ -102,12 +102,15 @@ public class RipplesApplication extends PApplet {
 			{
 				rippleIfValid(footRight, ripple);
 			}
+			boolean handsTogether = checkIntersect();
 			for(HandCircle ripple : leftHandCircles)
 			{
+				ripple.expandDiam(handsTogether);
 				rippleIfValid(handLeft, ripple);	
 			}
 			for(HandCircle ripple : rightHandCircles)
-			{				
+			{			
+				ripple.expandDiam(handsTogether);
 				rippleIfValid(handRight, ripple);	
 			}
 			for(HeadCircle ripple : headCircles)
@@ -139,23 +142,24 @@ public class RipplesApplication extends PApplet {
 	 */
 	public void rippleIfValid(PVector vec, Circle ripple) {
 		if(vec != null) {
-			if(ripple.getClass().toString().equals("class HandCircle")) {
-				if(!checkIntersect((HandCircle)ripple)) {
-					((HandCircle)ripple).expandDiam(false);
-					ripple.update(vec.x, vec.y);
-				} else {
-					((HandCircle)ripple).expandDiam(true);
-					ripple.update(vec.x, vec.y);
-				}
-			} else {
-				ripple.update(vec.x, vec.y); 
-			}
+//			if(ripple.getClass().toString().equals("class HandCircle")) {
+//				if(!checkIntersect()) {
+//					((HandCircle)ripple).expandDiam(false);
+//					ripple.update(vec.x, vec.y);
+//				} else {
+//					((HandCircle)ripple).expandDiam(true);
+//					ripple.update(vec.x, vec.y);
+//				}
+//			} else {
+//				ripple.update(vec.x, vec.y); 
+//			}
+			ripple.update(vec.x, vec.y);
 			ripple.display();
 		}
 
 	}
 
-	public boolean checkIntersect(HandCircle ripple) {
+	public boolean checkIntersect() {
 		//System.out.println("ran");
 		float diam = .1f;
 		if (handLeft!=null && handRight!=null)	{

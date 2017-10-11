@@ -15,6 +15,7 @@ public class HeadCircle implements Circle {
 	private static final float INIT_DIAM = .1f;
 	private long startTime;
 	private long stagger;
+	private boolean stop;
 	
 	public HeadCircle(PApplet parent, long stagger) {
 		startTime = System.currentTimeMillis();
@@ -40,19 +41,32 @@ public class HeadCircle implements Circle {
 	public void update(float x, float y) {
 		if (System.currentTimeMillis() - startTime > stagger) {
 			if (this.x == -1 || this.y == -1 || diam > MAX_DIAM) {
-				this.x = x;
-				this.y = y;
-				diam = INIT_DIAM;
-				rval = 255;
-				gval = 215;
-				color = parent.color(rval, gval, bval);
+				if (!stop) {
+					this.x = x;
+					this.y = y;
+					diam = INIT_DIAM;
+					rval = 255;
+					gval = 215;
+					color = parent.color(rval, gval, bval);
+				} else {
+					startTime = System.currentTimeMillis();
+				}
 			} else {
 				diam += speed;
 				rval -= 1;
+				if(rval < 0) rval = 0;
 				gval -= 1;
+				if(gval < 0) gval = 0;
 				color = parent.color(rval, gval, bval);
 			}
 		}
+	}
+	
+	public void stopRipples(boolean stop) {
+		if(stop) 
+			this.stop = true;
+		else
+			this.stop = false;
 	}
 
 	@Override
