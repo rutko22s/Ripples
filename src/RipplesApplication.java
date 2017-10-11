@@ -141,13 +141,16 @@ public class RipplesApplication extends PApplet {
 		if(vec != null) {
 			if(ripple.getClass().toString().equals("class HandCircle")) {
 				if(!checkIntersect((HandCircle)ripple)) {
+					((HandCircle)ripple).changeDiam(1f);
 					ripple.update(vec.x, vec.y);
-					ripple.display();
+				} else {
+					((HandCircle)ripple).changeDiam(7f);
+					ripple.update(vec.x, vec.y);
 				}
 			} else {
 				ripple.update(vec.x, vec.y); 
-				ripple.display();
 			}
+			ripple.display();
 		}
 
 	}

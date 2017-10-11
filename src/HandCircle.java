@@ -11,11 +11,12 @@ public class HandCircle implements Circle {
 	private float y = -1;
 	private float speed = .01f;
 	private float diam;
-	private static final float MAX_DIAM = 1f;
+	private float maxDiam = 1f;
 	private static final float INIT_DIAM = .1f;
 	boolean stop = false;
 	private long stagger;
 	private long startTime;
+	private float fadeRate = 5;
 	
 	public HandCircle(PApplet parent, long stagger) {
 		startTime = System.currentTimeMillis();
@@ -40,7 +41,7 @@ public class HandCircle implements Circle {
 	@Override
 	public void update(float x, float y) {
 		if (System.currentTimeMillis() - startTime > stagger) {
-			if (this.x == -1 || this.y == -1 || diam > MAX_DIAM) {
+			if (this.x == -1 || this.y == -1 || diam > maxDiam) {
 				this.x = x;
 				this.y = y;
 				diam = INIT_DIAM;
@@ -52,9 +53,9 @@ public class HandCircle implements Circle {
 				// if (!stop) {
 				parent.stroke(color);
 				diam += speed;
-				rval -= 5;
-				gval -= 5;
-				bval -= 5;
+				rval -= fadeRate;
+				gval -= fadeRate;
+				bval -= fadeRate;
 				if (bval < 0)
 					bval = 0;
 				color = parent.color(rval, gval, bval);
@@ -64,7 +65,12 @@ public class HandCircle implements Circle {
 			}
 		}
 	}
-
+	
+	public void changeDiam(float newValue) {
+		maxDiam = newValue;
+		fadeRate = newValue*.001f;
+	}
+ 
 	@Override
 	public void display() {
 		parent.stroke(color);

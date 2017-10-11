@@ -65,7 +65,7 @@ public class FootCircle implements Circle {
 
 	@Override
 	public void display() {
-		parent.ellipse(x, y, diam, diam);
+		parent.ellipse(x, y, diam, diam/2);
 	}
 
 }
