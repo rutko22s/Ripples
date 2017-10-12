@@ -49,19 +49,17 @@ public class RipplesApplication extends PApplet {
 		rightFootCircles = new ArrayList<FootCircle>();
 		wereTogether = false;
 		
-		for(int i=0; i<15; i++) {
+		for(int i=0; i<10; i++) {
 			if (i < 8) {
-				leftHandCircles.add(new HandCircle(this, i * 300));
-				rightHandCircles.add(new HandCircle(this, i * 300));
+				leftHandCircles.add(new HandCircle(this, i));
+				rightHandCircles.add(new HandCircle(this, i));
 				if (i < 4) {
-					leftFootCircles.add(new FootCircle(this, i * 100));
-					rightFootCircles.add(new FootCircle(this, i * 100));
+					leftFootCircles.add(new FootCircle(this, i * 200));
+					rightFootCircles.add(new FootCircle(this, i * 200));
 				}
 			}
-			headCircles.add(new HeadCircle(this, i*900));
+			headCircles.add(new HeadCircle(this, i*1000));
 		}
-		
-		//headCircles.add(tempCircle);
 
 	}
 	public void draw(){
@@ -71,7 +69,7 @@ public class RipplesApplication extends PApplet {
 		//make positive y up and center of window 0,0
 		translate(1,-1);
 
-		background(0,0,0);
+		background(0);
 
 		KinectBodyData bodyData = kinectReader.getMostRecentData();
 		Body person = bodyData.getPerson(0);
@@ -83,14 +81,14 @@ public class RipplesApplication extends PApplet {
 			handRight = person.getJoint(Body.HAND_RIGHT);
 
 
-			fill(255,255,255);
-			noStroke();
+			//fill(255,255,255);
+			//noStroke();
 			//commented out for now -- should be in final or no?
 //			drawIfValid(head);
 //			drawIfValid(footLeft);
 //			drawIfValid(footRight);
-			drawIfValid(handLeft);
-			drawIfValid(handRight);
+//			drawIfValid(handLeft);
+//			drawIfValid(handRight);
 			
 			noFill();
 			strokeWeight(0.009f);
@@ -103,11 +101,11 @@ public class RipplesApplication extends PApplet {
 				rippleIfValid(footRight, ripple);
 			}
 			boolean handsTogether = checkIntersect();
-			for(HandCircle ripple : leftHandCircles)
-			{
-				ripple.expandDiam(handsTogether);
-				rippleIfValid(handLeft, ripple);	
-			}
+//			for(HandCircle ripple : leftHandCircles)
+//			{
+//				ripple.expandDiam(handsTogether);
+//				rippleIfValid(handLeft, ripple);	
+//			}
 			for(HandCircle ripple : rightHandCircles)
 			{			
 				ripple.expandDiam(handsTogether);
@@ -143,18 +141,12 @@ public class RipplesApplication extends PApplet {
 	 */
 	public void rippleIfValid(PVector vec, Circle ripple) {
 		if(vec != null) {
-//			if(ripple.getClass().toString().equals("class HandCircle")) {
-//				if(!checkIntersect()) {
-//					((HandCircle)ripple).expandDiam(false);
-//					ripple.update(vec.x, vec.y);
-//				} else {
-//					((HandCircle)ripple).expandDiam(true);
-//					ripple.update(vec.x, vec.y);
-//				}
-//			} else {
-//				ripple.update(vec.x, vec.y); 
-//			}
 			ripple.update(vec.x, vec.y);
+			ripple.display();
+		}
+		else
+		{
+			ripple.update(-2, -2);
 			ripple.display();
 		}
 
