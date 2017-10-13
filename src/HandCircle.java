@@ -81,7 +81,7 @@ public class HandCircle implements Circle {
 			stagger = staggerNum * 1000;
 		} else if (diam > maxDiam) {
 			maxDiam = .7f;
-			fadeRate = 2;
+			fadeRate = 3;
 			stagger = staggerNum * 350;
 		}
 	}

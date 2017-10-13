@@ -18,7 +18,7 @@ public class HeadCircle implements Circle {
 	private boolean stop;
 	private float fadeRate = 1;
 	
-	//private int alpha;
+	private int alpha;
 	
 	public HeadCircle(PApplet parent, long stagger) {
 		startTime = System.currentTimeMillis();
@@ -27,7 +27,7 @@ public class HeadCircle implements Circle {
 		rval = 255;
 		gval = 215;
 		bval = 0;
-		//alpha = 255;
+		alpha = 255;
 		color = parent.color(rval,gval,bval);
 	}
 	
@@ -64,6 +64,8 @@ public class HeadCircle implements Circle {
 				if(gval < 0) gval = 0;
 				//alpha -= fadeRate;
 				color = parent.color(rval, gval, bval);
+//				if(diam > MAX_DIAM)
+//					alpha = 0;
 			}
 		}
 	}
@@ -77,8 +79,8 @@ public class HeadCircle implements Circle {
 
 	@Override
 	public void display() {
-		//parent.stroke(color, alpha);
-		parent.stroke(color);
+		parent.stroke(color, alpha);
+		//parent.stroke(color);
 		parent.ellipse(x, y, diam, diam);
 	}
 

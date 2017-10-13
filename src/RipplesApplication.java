@@ -27,7 +27,7 @@ public class RipplesApplication extends PApplet {
 
 	public void settings() {
 		//fullScreen(P2D);
-		createWindow(true, true, .5f);
+		createWindow(true, false, .5f);
 	}
 
 	public void setup(){
@@ -36,7 +36,7 @@ public class RipplesApplication extends PApplet {
 		 * use this code to run your PApplet from data recorded by UPDRecorder 
 		 */
 		try {
-			kinectReader = new KinectBodyDataProvider("test2.kinect", 1);
+			kinectReader = new KinectBodyDataProvider("test2.kinect", 3);
 		} catch (IOException e) {
 			System.out.println("Unable to create kinect producer");
 		} 
@@ -89,8 +89,8 @@ public class RipplesApplication extends PApplet {
 			//noStroke();
 			//commented out for now -- should be in final or no?
 //			drawIfValid(head);
-			drawIfValid(footLeft);
-			drawIfValid(footRight);
+//			drawIfValid(footLeft);
+//			drawIfValid(footRight);
 //			drawIfValid(handLeft);
 //			drawIfValid(handRight);
 			
@@ -98,10 +98,12 @@ public class RipplesApplication extends PApplet {
 			strokeWeight(0.009f);
 			for(FootCircle ripple : leftFootCircles) 
 			{
+				//ripple.distanceAverage((int)spineBase.y);
 				rippleIfValid(footLeft, ripple);
 			}
 			for(FootCircle ripple : rightFootCircles) 
 			{
+				//ripple.distanceAverage((int)spineBase.y);
 				rippleIfValid(footRight, ripple);
 			}
 			boolean handsTogether = checkIntersect();

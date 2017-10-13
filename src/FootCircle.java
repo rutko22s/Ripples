@@ -49,7 +49,7 @@ public class FootCircle implements Circle {
 	@Override
 	public void update(float x, float y) {
 		if (System.currentTimeMillis() - startTime > stagger) {
-			if ((this.x == -1 || this.y == -1 || Math.abs(currentDist-average) > 5) && !(x < -1 && y <-1)) {
+			if ((this.x == -1 || this.y == -1 || Math.abs(currentDist-average) > 2) && !(x < -1 && y <-1)) {
 				this.x = x;
 				this.y = y;
 				diam = INIT_DIAM;
@@ -79,7 +79,7 @@ public class FootCircle implements Circle {
 	{
 		int sum =0;
 		index++;
-		if(index > distFromSpine.length)
+		if(index >= distFromSpine.length)
 			index = 0;
 		
 		currentDist = Math.abs(spineY- this.y);
