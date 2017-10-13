@@ -42,6 +42,7 @@ public class RipplesApplication extends PApplet {
 		} 
 		 
 		//kinectReader = new KinectBodyDataProvider(8008);
+		
 		kinectReader.start();
 		
 		headCircles = new ArrayList<HeadCircle>();
@@ -65,13 +66,9 @@ public class RipplesApplication extends PApplet {
 
 	}
 	public void draw(){
-		//makes the window 2x2
-		//this.scale(width/3.0f, -height/2.0f);
-
-		//make positive y up and center of window 0,0
-		//translate(1,-1);
+		int spineY =0;
+		
 		setScale(.5f);
-
 		background(0);
 
 		KinectBodyData bodyData = kinectReader.getMostRecentData();
@@ -96,14 +93,17 @@ public class RipplesApplication extends PApplet {
 			
 			noFill();
 			strokeWeight(0.009f);
+			if (spineBase != null)
+				spineY = (int)spineBase.y;
+			
 			for(FootCircle ripple : leftFootCircles) 
 			{
-				//ripple.distanceAverage((int)spineBase.y);
+				ripple.distanceAverage(spineY);
 				rippleIfValid(footLeft, ripple);
 			}
 			for(FootCircle ripple : rightFootCircles) 
 			{
-				//ripple.distanceAverage((int)spineBase.y);
+				ripple.distanceAverage(spineY);
 				rippleIfValid(footRight, ripple);
 			}
 			boolean handsTogether = checkIntersect();

@@ -3,23 +3,18 @@ import processing.core.PApplet;
 public class FootCircle implements Circle {
 	
 	PApplet parent;
-	private int color;
-	private int rval;
-	private int gval;
-	private int bval;
+	private int color, rval, gval, bval;
 	private float x = -1;
 	private float y = -1;
 	private float speed = .02f;
 	private float diam;
-	private static final float MAX_DIAM = 3f;
+	//private static final float MAX_DIAM = 3f;
 	private static final float INIT_DIAM = .1f;
-	private long startTime;
-	private long stagger;
+	private long startTime, stagger;
 	private int fadeRate = 2;
 	private double[] distFromSpine;
-	private double currentDist;
+	private double currentDist, average;
 	private int index;
-	private double average;
 	
 	//private int alpha;
 
@@ -49,7 +44,7 @@ public class FootCircle implements Circle {
 	@Override
 	public void update(float x, float y) {
 		if (System.currentTimeMillis() - startTime > stagger) {
-			if ((this.x == -1 || this.y == -1 || Math.abs(currentDist-average) > 2) && !(x < -1 && y <-1)) {
+			if ((this.x == -1 || this.y == -1 || Math.abs(currentDist-average) > 5) && !(x < -1 && y <-1)) {
 				this.x = x;
 				this.y = y;
 				diam = INIT_DIAM;
