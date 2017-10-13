@@ -60,12 +60,15 @@ public class HandCircle implements Circle {
 			} else {
 				parent.stroke(color);
 				diam += speed;
-				rval -= fadeRate;
-				gval -= fadeRate;
-				bval -= fadeRate;
+				if(diam < 1.0f || diam > 2.5) {
+					rval -= fadeRate;
+					gval -= fadeRate;
+					bval -= fadeRate;
+				}
 				if (bval < 0)
 					bval = 0;
 				//alpha -=  fadeRate;
+					
 				color = parent.color(rval, gval, bval);
 			}
 		}

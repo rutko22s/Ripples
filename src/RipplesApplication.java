@@ -11,6 +11,7 @@ import processing.core.PVector;
  */
 public class RipplesApplication extends PApplet {
 
+	public static float PROJECTOR_RATIO = 1080f/1920.0f;
 	KinectBodyDataProvider kinectReader;
 	//HeadCircle tempCircle;
 	List<HeadCircle> headCircles;
@@ -25,7 +26,8 @@ public class RipplesApplication extends PApplet {
 	PVector handRight;
 
 	public void settings() {
-		fullScreen(P2D);
+		//fullScreen(P2D);
+		createWindow(true, true, .5f);
 	}
 
 	public void setup(){
@@ -64,10 +66,11 @@ public class RipplesApplication extends PApplet {
 	}
 	public void draw(){
 		//makes the window 2x2
-		this.scale(width/3.0f, -height/2.0f);
+		//this.scale(width/3.0f, -height/2.0f);
 
 		//make positive y up and center of window 0,0
-		translate(1,-1);
+		//translate(1,-1);
+		setScale(.5f);
 
 		background(0);
 
@@ -75,6 +78,7 @@ public class RipplesApplication extends PApplet {
 		Body person = bodyData.getPerson(0);
 		if(person != null){
 			PVector head = person.getJoint(Body.HEAD);
+			PVector spineBase = person.getJoint(Body.SPINE_BASE);
 			PVector footLeft = person.getJoint(Body.FOOT_LEFT);
 			PVector footRight = person.getJoint(Body.FOOT_RIGHT);
 			handLeft = person.getJoint(Body.HAND_LEFT);
@@ -85,8 +89,8 @@ public class RipplesApplication extends PApplet {
 			//noStroke();
 			//commented out for now -- should be in final or no?
 //			drawIfValid(head);
-//			drawIfValid(footLeft);
-//			drawIfValid(footRight);
+			drawIfValid(footLeft);
+			drawIfValid(footRight);
 //			drawIfValid(handLeft);
 //			drawIfValid(handRight);
 			
@@ -101,11 +105,11 @@ public class RipplesApplication extends PApplet {
 				rippleIfValid(footRight, ripple);
 			}
 			boolean handsTogether = checkIntersect();
-//			for(HandCircle ripple : leftHandCircles)
-//			{
-//				ripple.expandDiam(handsTogether);
-//				rippleIfValid(handLeft, ripple);	
-//			}
+			for(HandCircle ripple : leftHandCircles)
+			{
+				ripple.expandDiam(handsTogether);
+				rippleIfValid(handLeft, ripple);	
+			}
 			for(HandCircle ripple : rightHandCircles)
 			{			
 				ripple.expandDiam(handsTogether);
@@ -173,6 +177,32 @@ public class RipplesApplication extends PApplet {
 			else
 				return false;						
 		}
+	}
+	
+	
+	
+	
+	public void createWindow(boolean useP2D, boolean isFullscreen, float windowsScale) {
+		if (useP2D) {
+			if(isFullscreen) {
+				fullScreen(P2D);  			
+			} else {
+				size((int)(1920 * windowsScale), (int)(1080 * windowsScale), P2D);
+			}
+		} else {
+			if(isFullscreen) {
+				fullScreen();  			
+			} else {
+				size((int)(1920 * windowsScale), (int)(1080 * windowsScale), P2D);
+			}
+		}		
+	}
+	
+	// use lower numbers to zoom out (show more of the world)
+	// zoom of 1 means that the window is 2 meters wide and appox 1 meter tall.
+	public void setScale(float zoom) {
+		scale(zoom* width/2.0f, zoom * -width/2.0f);
+		translate(1f/zoom , -PROJECTOR_RATIO/zoom );		
 	}
 
 	public static void main(String[] args) {
