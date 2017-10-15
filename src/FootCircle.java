@@ -55,8 +55,10 @@ public class FootCircle implements Circle {
 		if (System.currentTimeMillis() - startTime > stagger) {
 			//if the foot is currently lower than the waist than it has been on average, we expect that it is the result of 
 			//dropping the foot to the ground
-			if ( (this.x == -1 || this.y == -1 ) ||
-					(onFloor)// && System.currentTimeMillis() != startTime) 
+			
+			// *** if the foot is on the ground it will ripple
+			if ( (this.x == -1 || this.y == -1 ) //|| currentDist-average > .01) 
+					|| (onFloor)
 					&&
 					(diam >= MAX_DIAM) &&
 					!(x < -100 && y <-100)) 

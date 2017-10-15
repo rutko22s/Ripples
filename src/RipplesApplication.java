@@ -47,7 +47,7 @@ public class RipplesApplication extends PApplet {
 		 * use this code to run your PApplet from data recorded by UPDRecorder 
 		 */
 		try {
-			kinectReader = new KinectBodyDataProvider("test3.kinect", 3);
+			kinectReader = new KinectBodyDataProvider("test2.kinect", 3);
 		} catch (IOException e) {
 			System.out.println("Unable to create kinect producer");
 		} 
