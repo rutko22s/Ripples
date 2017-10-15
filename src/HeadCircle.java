@@ -71,10 +71,7 @@ public class HeadCircle implements Circle {
 				if(rval < 0) rval = 0;
 				gval -= fadeRate;
 				if(gval < 0) gval = 0;
-				//alpha -= fadeRate;
 				color = parent.color(rval, gval, bval);
-//				if(diam > MAX_DIAM)
-//					alpha = 0;
 			}
 		}
 	}
@@ -92,7 +89,6 @@ public class HeadCircle implements Circle {
 	@Override
 	public void display() {
 		parent.stroke(color, alpha);
-		//parent.stroke(color);
 		parent.ellipse(x, y, diam, diam);
 	}
 

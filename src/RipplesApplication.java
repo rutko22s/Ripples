@@ -36,7 +36,7 @@ public class RipplesApplication extends PApplet {
 	 */
 	public void settings() {
 		//fullScreen(P2D);
-		createWindow(true, false, .5f);
+		createWindow(true, true, .5f);
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class RipplesApplication extends PApplet {
 		 * use this code to run your PApplet from data recorded by UPDRecorder 
 		 */
 		try {
-			kinectReader = new KinectBodyDataProvider("test2.kinect", 3);
+			kinectReader = new KinectBodyDataProvider("test3.kinect", 3);
 		} catch (IOException e) {
 			System.out.println("Unable to create kinect producer");
 		} 
@@ -86,9 +86,7 @@ public class RipplesApplication extends PApplet {
 	/**
 	 * Continuously updates the location and behavior of all the ripples, based on limb data from the camera
 	 */
-	public void draw(){
-		int spineY = 0;
-		
+	public void draw(){		
 		setScale(.5f);
 		background(0);
 
@@ -102,34 +100,21 @@ public class RipplesApplication extends PApplet {
 			PVector footRight = person.getJoint(Body.FOOT_RIGHT);
 			handLeft = person.getJoint(Body.HAND_LEFT);
 			handRight = person.getJoint(Body.HAND_RIGHT);
-
-
-			//commented out for now -- should be in final or no?
-			//fill(255,255,255);
-			//noStroke();
-//			drawIfValid(head);
-			drawIfValid(footLeft);      //for testing, to track feet
-			drawIfValid(footRight);
-//			drawIfValid(handLeft);
-//			drawIfValid(handRight);
 			
 			noFill();
 			strokeWeight(0.009f);
 			
 			floor(footLeft, footRight);
-			//grab the location of the spine along the y axis
-			if (spineBase != null)
-				spineY = (int)spineBase.y;
-			
+
 			//determine what to do with each of our ripples
 			for(FootCircle ripple : leftFootCircles) 
 			{
-				ripple.floor(floor, footLeft);
+				ripple.isOnFloor(floor, footLeft);
 				rippleIfValid(footLeft, ripple);
 			}
 			for(FootCircle ripple : rightFootCircles) 
 			{
-				ripple.floor(floor, footRight);
+				ripple.isOnFloor(floor, footRight);
 				rippleIfValid(footRight, ripple);
 			}
 			boolean handsTogether = checkIntersect(); //determine whether or not the hands are currently together
@@ -212,27 +197,35 @@ public class RipplesApplication extends PApplet {
 	}
 	
 	
+	/**
+	 * Approximate where the floor is currently located based on the continued placement of both feet
+	 * @param footLeft the left foot
+	 * @param footRight the right foot
+	 */
 	public void floor(PVector footLeft, PVector footRight)
 	{
+		//when the index reaches the end of the array, bring it back to the beginning
 		if(index >= floorArr.length)
 			index = 0;
+		
 		if(footLeft != null && footRight != null)
 		{
 			float sum = 0;
 			int notInArr = 0;
+			//store the magnitude of both feet in the array of possible floor values
 			floorArr[index] = footLeft.mag();
 			floorArr[index+1] = footRight.mag();
 			index += 2;
 			
 			for(int i =0; i < floorArr.length; i++)
 			{
+				//if this value hasnt been populated yet (early on in the program life cycle), make sure to ignore it when calculating floor average
 				if(floorArr[i] == 0)
-					notInArr++;
-				
+					notInArr++;				
 				sum += floorArr[i];
 			}
+			//approximate where the floor might be based on recent data
 			floor = sum / (floorArr.length - notInArr);
-			//System.out.println(floor);
 		}
 	}
 	
