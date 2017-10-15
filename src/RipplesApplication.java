@@ -22,6 +22,11 @@ public class RipplesApplication extends PApplet {
 	int count = 1;
 	private boolean wereTogether;
 	
+	int index = 0;
+	
+	float[] floorArr;
+	float floor =0;
+	
 	PVector handLeft;
 	PVector handRight;
 
@@ -36,7 +41,7 @@ public class RipplesApplication extends PApplet {
 		 * use this code to run your PApplet from data recorded by UPDRecorder 
 		 */
 		try {
-			kinectReader = new KinectBodyDataProvider("test2.kinect", 3);
+			kinectReader = new KinectBodyDataProvider("test3.kinect", 3);
 		} catch (IOException e) {
 			System.out.println("Unable to create kinect producer");
 		} 
@@ -52,6 +57,8 @@ public class RipplesApplication extends PApplet {
 		rightFootCircles = new ArrayList<FootCircle>();
 		wereTogether = false;
 		
+		floorArr = new float[100];
+		
 		for(int i=0; i<10; i++) {
 			if (i < 8) {
 				leftHandCircles.add(new HandCircle(this, i));
@@ -65,6 +72,7 @@ public class RipplesApplication extends PApplet {
 		}
 
 	}
+	
 	public void draw(){
 		int spineY =0;
 		
@@ -82,8 +90,8 @@ public class RipplesApplication extends PApplet {
 			handRight = person.getJoint(Body.HAND_RIGHT);
 
 
-			//fill(255,255,255);
-			//noStroke();
+			fill(255,255,255);
+			noStroke();
 			//commented out for now -- should be in final or no?
 //			drawIfValid(head);
 //			drawIfValid(footLeft);
@@ -93,17 +101,17 @@ public class RipplesApplication extends PApplet {
 			
 			noFill();
 			strokeWeight(0.009f);
-			if (spineBase != null)
-				spineY = (int)spineBase.y;
-			
+//			if (spineBase != null)
+//				spineY = (int)spineBase.y;
+			floor(footLeft, footRight);
 			for(FootCircle ripple : leftFootCircles) 
 			{
-				ripple.distanceAverage(spineY);
+				ripple.floor(floor, footLeft);
 				rippleIfValid(footLeft, ripple);
 			}
 			for(FootCircle ripple : rightFootCircles) 
 			{
-				ripple.distanceAverage(spineY);
+				ripple.floor(floor, footRight);
 				rippleIfValid(footRight, ripple);
 			}
 			boolean handsTogether = checkIntersect();
@@ -152,7 +160,7 @@ public class RipplesApplication extends PApplet {
 		}
 		else
 		{
-			ripple.update(-2, -2);
+			ripple.update(-200, -200);
 			ripple.display();
 		}
 
@@ -181,6 +189,30 @@ public class RipplesApplication extends PApplet {
 		}
 	}
 	
+	
+	public void floor(PVector footLeft, PVector footRight)
+	{
+		if(index >= floorArr.length)
+			index = 0;
+		if(footLeft != null && footRight != null)
+		{
+			float sum = 0;
+			int notInArr = 0;
+			floorArr[index] = footLeft.mag();
+			floorArr[index+1] = footRight.mag();
+			index += 2;
+			
+			for(int i =0; i < floorArr.length; i++)
+			{
+				if(floorArr[i] == 0)
+					notInArr++;
+				
+				sum += floorArr[i];
+			}
+			floor = sum / (floorArr.length - notInArr);
+			//System.out.println(floor);
+		}
+	}
 	
 	
 	
