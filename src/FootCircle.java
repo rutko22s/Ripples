@@ -51,9 +51,11 @@ public class FootCircle implements Circle {
 		
 		if (System.currentTimeMillis() - startTime > stagger) {
 			if ( (this.x == -1 || this.y == -1 ) ||
-					(onFloor && System.currentTimeMillis() != startTime) &&
+					(onFloor)// && System.currentTimeMillis() != startTime) 
+					&&
 					(diam >= MAX_DIAM) &&
-					!(x < -100 && y <-100)) {
+					!(x < -100 && y <-100)) 
+			{
 				this.x = x;
 				this.y = y;
 				diam = INIT_DIAM;
