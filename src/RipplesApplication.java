@@ -6,21 +6,22 @@ import processing.core.PApplet;
 import processing.core.PVector;
 
 /**
+ * The starting point of the code, maintains all the Circles for display and takes in data from the camera.
  * @author Sara, Zhiling, Isabelle
- *
+ * 
  */
 public class RipplesApplication extends PApplet {
 
 	public static float PROJECTOR_RATIO = 1080f/1920.0f;
 	KinectBodyDataProvider kinectReader;
-	//HeadCircle tempCircle;
-	List<HeadCircle> headCircles;
+	//lists containing all the Circles for each body part
+	List<HeadCircle> headCircles;      
 	List<HandCircle> leftHandCircles;
 	List<HandCircle> rightHandCircles;
 	List<FootCircle> leftFootCircles;
 	List<FootCircle> rightFootCircles;
-	int count = 1;
-	private boolean wereTogether;
+	//remembers whether hands were last together or apart when one or both is no longer detected
+	private boolean wereTogether;   
 	
 	int index = 0;
 	
@@ -30,13 +31,18 @@ public class RipplesApplication extends PApplet {
 	PVector handLeft;
 	PVector handRight;
 
+	/**
+	 * Set the window to full screen at the appropriate size ratio
+	 */
 	public void settings() {
 		//fullScreen(P2D);
 		createWindow(true, false, .5f);
 	}
 
+	/**
+	 * Preparation code to get the program ready to go
+	 */
 	public void setup(){
-
 		/*
 		 * use this code to run your PApplet from data recorded by UPDRecorder 
 		 */
@@ -50,15 +56,19 @@ public class RipplesApplication extends PApplet {
 		
 		kinectReader.start();
 		
+		//initialize our global variables
 		headCircles = new ArrayList<HeadCircle>();
 		leftHandCircles = new ArrayList<HandCircle>();
 		rightHandCircles = new ArrayList<HandCircle>();
 		leftFootCircles = new ArrayList<FootCircle>();
 		rightFootCircles = new ArrayList<FootCircle>();
-		wereTogether = false;
+		wereTogether = false;    
 		
 		floorArr = new float[100];
-		
+
+		//populate the lists with new instances of Circles
+		//each circle will be passed a different value for the stagger param, to ensure they do not ripple at the same time
+		//note the head has the most circles, then hands, then feet
 		for(int i=0; i<10; i++) {
 			if (i < 8) {
 				leftHandCircles.add(new HandCircle(this, i));
@@ -73,8 +83,11 @@ public class RipplesApplication extends PApplet {
 
 	}
 	
+	/**
+	 * Continuously updates the location and behavior of all the ripples, based on limb data from the camera
+	 */
 	public void draw(){
-		int spineY =0;
+		int spineY = 0;
 		
 		setScale(.5f);
 		background(0);
@@ -82,6 +95,7 @@ public class RipplesApplication extends PApplet {
 		KinectBodyData bodyData = kinectReader.getMostRecentData();
 		Body person = bodyData.getPerson(0);
 		if(person != null){
+			//get all the data for the body parts
 			PVector head = person.getJoint(Body.HEAD);
 			PVector spineBase = person.getJoint(Body.SPINE_BASE);
 			PVector footLeft = person.getJoint(Body.FOOT_LEFT);
@@ -90,20 +104,24 @@ public class RipplesApplication extends PApplet {
 			handRight = person.getJoint(Body.HAND_RIGHT);
 
 
-			fill(255,255,255);
-			noStroke();
 			//commented out for now -- should be in final or no?
+			//fill(255,255,255);
+			//noStroke();
 //			drawIfValid(head);
-//			drawIfValid(footLeft);
-//			drawIfValid(footRight);
+			drawIfValid(footLeft);      //for testing, to track feet
+			drawIfValid(footRight);
 //			drawIfValid(handLeft);
 //			drawIfValid(handRight);
 			
 			noFill();
 			strokeWeight(0.009f);
-//			if (spineBase != null)
-//				spineY = (int)spineBase.y;
+			
 			floor(footLeft, footRight);
+			//grab the location of the spine along the y axis
+			if (spineBase != null)
+				spineY = (int)spineBase.y;
+			
+			//determine what to do with each of our ripples
 			for(FootCircle ripple : leftFootCircles) 
 			{
 				ripple.floor(floor, footLeft);
@@ -114,7 +132,7 @@ public class RipplesApplication extends PApplet {
 				ripple.floor(floor, footRight);
 				rippleIfValid(footRight, ripple);
 			}
-			boolean handsTogether = checkIntersect();
+			boolean handsTogether = checkIntersect(); //determine whether or not the hands are currently together
 			for(HandCircle ripple : leftHandCircles)
 			{
 				ripple.expandDiam(handsTogether);
@@ -149,8 +167,7 @@ public class RipplesApplication extends PApplet {
 	
 	/**
 	 * Calls the display and update method of a circle.
-	 * Will do nothing is vec is null.  This is handy because get joint 
-	 * will return null if the joint isn't tracked. 
+	 * If the vec is null, circles will get reset to their initial state.
 	 * @param vec
 	 */
 	public void rippleIfValid(PVector vec, Circle ripple) {
@@ -166,14 +183,19 @@ public class RipplesApplication extends PApplet {
 
 	}
 
-	public boolean checkIntersect() {
-
+	/**
+	 * Determine whether or not the right and left hand are currently together.
+	 * @return true if the hands are together
+	 */
+	public boolean checkIntersect() {	
 		float diam = .1f;
 		if (handLeft!=null && handRight!=null)	{
+			//calculate the distance between the hands
 			double distance = Math.sqrt( 
 					(double)Math.pow((handLeft.x - handRight.x), 2) + 
 					(double)Math.pow((handLeft.y - handRight.y), 2));
 
+			//if the distance is less than the range we're checking for, we will read that the hands are together
 			if(distance <= diam) {
 				wereTogether = true;
 				return true;
