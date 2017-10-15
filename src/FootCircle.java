@@ -15,8 +15,6 @@ public class FootCircle implements Circle {
 	private double[] distFromSpine;
 	private double currentDist, average;
 	private int index;
-	
-	//private int alpha;
 
 	public FootCircle(PApplet parent, long stagger) {
 		startTime = System.currentTimeMillis();
@@ -28,7 +26,6 @@ public class FootCircle implements Circle {
 		color = parent.color(rval,gval,bval);
 		distFromSpine = new double[100];
 		index =0;
-		//alpha = 255;
 	}
 	
 	@Override
@@ -65,14 +62,13 @@ public class FootCircle implements Circle {
 
 	@Override
 	public void display() {
-		//parent.stroke(color, alpha);
 		parent.stroke(color);
 		parent.ellipse(x, y, diam, diam/2);
 	}
 	
 	public void distanceAverage(int spineY)
 	{
-		int sum =0;
+		int sum = 0;
 		index++;
 		if(index >= distFromSpine.length)
 			index = 0;
@@ -87,6 +83,8 @@ public class FootCircle implements Circle {
 		}
 		
 		average = sum /distFromSpine.length;
+		
+		
 	}
 
 }
