@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,7 +94,6 @@ public class RipplesApplication extends PApplet {
 		if(person != null){
 			//get all the data for the body parts
 			PVector head = person.getJoint(Body.HEAD);
-			PVector spineBase = person.getJoint(Body.SPINE_BASE);
 			PVector footLeft = person.getJoint(Body.FOOT_LEFT);
 			PVector footRight = person.getJoint(Body.FOOT_RIGHT);
 			handLeft = person.getJoint(Body.HAND_LEFT);

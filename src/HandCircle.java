@@ -31,9 +31,9 @@ public class HandCircle implements Circle {
 		this.staggerNum = staggerNum;
 		this.parent = parent;
 		//initial r,g,b values
-		rval = 255;
-		gval = 130;
-		bval = 67;
+		rval = 0;
+		gval = 255;
+		bval = 42;
 		color = parent.color(rval,gval,bval);
 	}
 	
@@ -58,9 +58,9 @@ public class HandCircle implements Circle {
 				this.x = x;
 				this.y = y;
 				diam = INIT_DIAM;
-				rval = 255;
-				gval = 130;
-				bval = 67;
+				rval = 0;
+				gval = 255;
+				bval = 42;
 				color = parent.color(rval, gval, bval);
 			} else {
 				//else expand the circle, and make it darker to create a fading effect
