@@ -53,7 +53,7 @@ public class HandCircle implements Circle {
 		if (System.currentTimeMillis() - startTime > stagger) {
 			//if the circle has become large enough or the hands can't be found
 			if ( (this.x == -1 || this.y == -1 || diam > maxDiam) && 
-				  !(x < -1 && y < -1)) {
+				  !(x < -100 && y < -100)) {
 				//reset the circle to its initial state
 				this.x = x;
 				this.y = y;
@@ -91,6 +91,7 @@ public class HandCircle implements Circle {
 			maxDiam = 2.7f;
 			fadeRate = 1f;
 			stagger = staggerNum * 1000;
+			startTime = System.currentTimeMillis();
 		} else if (diam > maxDiam) {
 			maxDiam = .7f;
 			fadeRate = 3;

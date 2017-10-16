@@ -50,7 +50,7 @@ public class HeadCircle implements Circle {
 		//once we have waited the appropriate amount of stagger time
 		if (System.currentTimeMillis() - startTime > stagger) {
 			//if the circle has reached its maximum diameter
-			if ((this.x == -1 || this.y == -1 || diam > MAX_DIAM) && !(x < -1 && y <-1)) {
+			if ((this.x == -1 || this.y == -1 || diam > MAX_DIAM) && !(x < -100 && y <-100)) {
 				//and the circle has not been told to stop
 				if (!stop) {
 					//reset to its beginning state

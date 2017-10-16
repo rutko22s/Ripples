@@ -45,14 +45,14 @@ public class RipplesApplication extends PApplet {
 	public void setup(){
 		/*
 		 * use this code to run your PApplet from data recorded by UPDRecorder 
-		 */
+		 
 		try {
 			kinectReader = new KinectBodyDataProvider("test3.kinect", 3);
 		} catch (IOException e) {
 			System.out.println("Unable to create kinect producer");
-		} 
+		} */
 		 
-		//kinectReader = new KinectBodyDataProvider(8008);
+		kinectReader = new KinectBodyDataProvider(8008);
 		
 		kinectReader.start();
 		
@@ -73,7 +73,7 @@ public class RipplesApplication extends PApplet {
 			if (i < 8) {
 				leftHandCircles.add(new HandCircle(this, i));
 				rightHandCircles.add(new HandCircle(this, i));
-				if (i < 4) {
+				if (i < 8) {
 					leftFootCircles.add(new FootCircle(this, i * 200));
 					rightFootCircles.add(new FootCircle(this, i * 200));
 				}
