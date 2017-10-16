@@ -60,7 +60,6 @@ public class FootCircle implements Circle {
 					(diam >= MAX_DIAM) &&
 					!(x < -100 && y <-100)) 
 			{
-				System.out.println(System.currentTimeMillis() + ": reset a foot ripple");
 				//reset the ripple to its initial state
 				this.x = x;
 				this.y = y;
