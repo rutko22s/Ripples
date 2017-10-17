@@ -22,9 +22,9 @@ public class FootCircle implements Circle {
 	private boolean onFloor = false;	//whether or not the foot is on the floor
 	private boolean stop = false;
 	
-	private double[] distFromSpine;	//an array of values maintaining the distance between the spine and the foot for the past couple checks
-	private double currentDist, average;	//the current distance between the spine and foot, and the average of distFromSpine's values
-	private int index;	//the current place in the array to insert the latest distance
+//	private double[] distFromSpine;	//an array of values maintaining the distance between the spine and the foot for the past couple checks
+//	private double currentDist, average;	//the current distance between the spine and foot, and the average of distFromSpine's values
+//	private int index;	//the current place in the array to insert the latest distance
 
 
 	public FootCircle(PApplet parent, long stagger) {
@@ -35,8 +35,8 @@ public class FootCircle implements Circle {
 		gval = 200;
 		bval = 250;
 		color = parent.color(rval,gval,bval);
-		distFromSpine = new double[30];
-		index = 0;
+//		distFromSpine = new double[30];
+//		index = 0;
 	}
 	
 	@Override
