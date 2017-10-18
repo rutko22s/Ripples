@@ -60,15 +60,19 @@ public class FootCircle implements Circle {
 					(diam >= MAX_DIAM) &&
 					!(x < -100 && y <-100)) 
 			{
-				//reset the ripple to its initial state
-				this.x = x;
-				this.y = y;
-				diam = INIT_DIAM;
-				rval = 40;
-				gval = 200;
-				bval = 250;
-				color = parent.color(rval, gval, bval);
-				startTime = System.currentTimeMillis();
+				if (!stop) {
+					// reset the ripple to its initial state
+					this.x = x;
+					this.y = y;
+					diam = INIT_DIAM;
+					rval = 40;
+					gval = 200;
+					bval = 250;
+					color = parent.color(rval, gval, bval);
+					startTime = System.currentTimeMillis();
+				} else {
+					startTime = System.currentTimeMillis();
+				}
 			} else {
 				//else expand the ripple and darken its color slightly
 				diam += speed;

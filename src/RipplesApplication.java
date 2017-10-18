@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,14 +45,14 @@ public class RipplesApplication extends PApplet {
 	public void setup(){
 		/*
 		 * use this code to run your PApplet from data recorded by UPDRecorder 
-		 
+		 */
 		try {
-			kinectReader = new KinectBodyDataProvider("test3.kinect", 3);
+			kinectReader = new KinectBodyDataProvider("test2.kinect", 3);
 		} catch (IOException e) {
 			System.out.println("Unable to create kinect producer");
-		} */
+		} 
 		 
-		kinectReader = new KinectBodyDataProvider(8008);
+		//kinectReader = new KinectBodyDataProvider(8008);
 		
 		kinectReader.start();
 		
@@ -105,17 +106,19 @@ public class RipplesApplication extends PApplet {
 			floor(footLeft, footRight);
 
 			//determine what to do with each of our ripples
+			boolean handsTogether = checkIntersect(); //determine whether or not the hands are currently together
 			for(FootCircle ripple : leftFootCircles) 
 			{
+				ripple.stopRipples(handsTogether);
 				ripple.isOnFloor(floor, footLeft);
 				rippleIfValid(footLeft, ripple);
 			}
 			for(FootCircle ripple : rightFootCircles) 
 			{
+				ripple.stopRipples(handsTogether);
 				ripple.isOnFloor(floor, footRight);
 				rippleIfValid(footRight, ripple);
 			}
-			boolean handsTogether = checkIntersect(); //determine whether or not the hands are currently together
 			for(HandCircle ripple : leftHandCircles)
 			{
 				ripple.expandDiam(handsTogether);
