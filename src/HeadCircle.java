@@ -1,6 +1,9 @@
 import processing.core.*;
+
 /**
- * Circles designed to come from the head. Typically triggered, but cease when the interactor brings their hands together.
+ * Circles designed to come from the head. Typically triggered, but cease when
+ * the interactor brings their hands together.
+ * 
  * @author Sara, Zhiling, Isabelle
  *
  */
@@ -19,11 +22,12 @@ public class HeadCircle implements Circle {
 	private static final float INIT_DIAM = .1f;
 	private long startTime;
 	private long stagger;
-	private boolean stop;	//tells the circle whether to appear
-	private float fadeRate = 1;	//since head circles are much larger, they deteriorate at the slowest rate possible
-	
+	private boolean stop; // tells the circle whether to appear
+	private float fadeRate = 1; // since head circles are much larger, they deteriorate at the slowest rate
+								// possible
+
 	private int alpha;
-	
+
 	public HeadCircle(PApplet parent, long stagger) {
 		startTime = System.currentTimeMillis();
 		this.stagger = stagger;
@@ -32,9 +36,9 @@ public class HeadCircle implements Circle {
 		gval = 215;
 		bval = 0;
 		alpha = 255;
-		color = parent.color(rval,gval,bval);
+		color = parent.color(rval, gval, bval);
 	}
-	
+
 	@Override
 	public int getColor() {
 		return color;
@@ -47,13 +51,13 @@ public class HeadCircle implements Circle {
 
 	@Override
 	public void update(float x, float y) {
-		//once we have waited the appropriate amount of stagger time
+		// once we have waited the appropriate amount of stagger time
 		if (System.currentTimeMillis() - startTime > stagger) {
-			//if the circle has reached its maximum diameter
-			if ((this.x == -1 || this.y == -1 || diam > MAX_DIAM) && !(x < -100 && y <-100)) {
-				//and the circle has not been told to stop
+			// if the circle has reached its maximum diameter
+			if ((this.x == -1 || this.y == -1 || diam > MAX_DIAM) && !(x < -100 && y < -100)) {
+				// and the circle has not been told to stop
 				if (!stop) {
-					//reset to its beginning state
+					// reset to its beginning state
 					this.x = x;
 					this.y = y;
 					diam = INIT_DIAM;
@@ -61,26 +65,30 @@ public class HeadCircle implements Circle {
 					gval = 215;
 					color = parent.color(rval, gval, bval);
 				} else {
-					//otherwise reset the start time so each ripple is still staggered
+					// otherwise reset the start time so each ripple is still staggered
 					startTime = System.currentTimeMillis();
 				}
 			} else {
-				//else continue to expand and fade out the ripple
+				// else continue to expand and fade out the ripple
 				diam += speed;
 				rval -= fadeRate;
-				if(rval < 0) rval = 0;
+				if (rval < 0)
+					rval = 0;
 				gval -= fadeRate;
-				if(gval < 0) gval = 0;
+				if (gval < 0)
+					gval = 0;
 				color = parent.color(rval, gval, bval);
 			}
 		}
 	}
-	
+
 	/**
-	 * @param stop true if we want the circle to stop its behavior, false if we want it to continue
+	 * @param stop
+	 *            true if we want the circle to stop its behavior, false if we
+	 *            wantit to continue
 	 */
 	public void stopRipples(boolean stop) {
-		if(stop) 
+		if (stop)
 			this.stop = true;
 		else
 			this.stop = false;
